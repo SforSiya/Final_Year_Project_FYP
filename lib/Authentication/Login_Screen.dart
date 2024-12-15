@@ -66,6 +66,13 @@ class _LoginPageState extends State<LoginPage> {
         return;
       }
 
+      // Convert age
+      final age = userData['age'] is int
+          ? userData['age'] as int
+          : int.tryParse(userData['age']?.toString() ?? '') ?? 0;
+
+
+
       String role = userData['role'] as String;
       String username = userData['username'] ?? userData['name'] ?? ''; // Fallback to 'name' for child users
 
@@ -91,11 +98,13 @@ class _LoginPageState extends State<LoginPage> {
           );
           break;
         case 'child':
+          final String uid = user.uid; // Get the user ID from FirebaseAuth
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(
               builder: (context) => ChildHomePage(
                 userName: username,
+                userId: uid, // Pass the UID here
               ),
             ),
           );
@@ -129,11 +138,11 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Color(0xFFFDFAF7),
       appBar: AppBar(
-        backgroundColor: Colors.green[400],
+        backgroundColor: Color(0xFF5c724a),
         elevation: 0,
-        title: Text('Login', style: TextStyle(color: Colors.white)),
+        title: Text('Login', style: TextStyle(color: Color(0xFFfaf0e6))),
         centerTitle: true,
       ),
       body: SingleChildScrollView(
@@ -148,7 +157,7 @@ class _LoginPageState extends State<LoginPage> {
                 style: TextStyle(
                   fontSize: 28,
                   fontWeight: FontWeight.bold,
-                  color: Colors.green[400],
+                  color: Color(0xFF5c724a),
                 ),
               ),
               SizedBox(height: 8),
@@ -215,7 +224,7 @@ class _LoginPageState extends State<LoginPage> {
                       controller: _emailController,
                       decoration: InputDecoration(
                         labelText: 'Email',
-                        prefixIcon: Icon(Icons.email, color: Colors.green[400]),
+                        prefixIcon: Icon(Icons.email, color: Color(0xFF5c724a)),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12.0),
                           borderSide: BorderSide.none,
@@ -230,11 +239,11 @@ class _LoginPageState extends State<LoginPage> {
                       obscureText: _obscurePassword,
                       decoration: InputDecoration(
                         labelText: 'Password',
-                        prefixIcon: Icon(Icons.lock, color: Colors.green[400]),
+                        prefixIcon: Icon(Icons.lock, color: Color(0xFF5c724a)),
                         suffixIcon: IconButton(
                           icon: Icon(
                             _obscurePassword ? Icons.visibility_off : Icons.visibility,
-                            color: Colors.green[400],
+                            color:Color(0xFF5c724a),
                           ),
                           onPressed: () {
                             setState(() {
@@ -265,7 +274,7 @@ class _LoginPageState extends State<LoginPage> {
                   },
                   child: Text(
                     "Forget Password",
-                    style: TextStyle(color: Colors.green[400], fontSize: 16),
+                    style: TextStyle(color: Color(0xFF5c724a), fontSize: 16),
                   ),
                 ),
               ),
@@ -276,7 +285,7 @@ class _LoginPageState extends State<LoginPage> {
                 onPressed: _login,
                 style: ElevatedButton.styleFrom(
                   minimumSize: Size(screenWidth * 0.8, 50),
-                  backgroundColor: Colors.green[400],
+                  backgroundColor: Color(0xFF5c724a),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12.0),
                   ),
@@ -304,7 +313,7 @@ class _LoginPageState extends State<LoginPage> {
                 },
                 child: Text(
                   "Don't have an account? Sign up",
-                  style: TextStyle(color: Colors.green[400], fontSize: 16),
+                  style: TextStyle(color: Color(0xFF5c724a), fontSize: 16),
                 ),
               ),
             ],
