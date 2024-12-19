@@ -33,6 +33,7 @@ class AuthService {
         email: email,
         password: password,
       );
+      print(userCredential);
 
       return userCredential.user;
     } catch (e) {

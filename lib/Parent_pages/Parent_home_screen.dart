@@ -1,329 +1,192 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:final_year_project/Authentication/Login_Screen.dart';
+import 'package:final_year_project/Chatbot/chat_screen.dart';
+import 'package:final_year_project/Education/education_screen.dart';
+import 'package:final_year_project/Group_Chat/groupchat.dart';
+import 'parent_home.dart';
+import 'book_appointment.dart';
+import 'appointment_status.dart';
 
-import 'kid_register.dart';
-
-class ParentHomeScreen extends StatelessWidget {
+class ParentHomeScreen extends StatefulWidget {
   final String userName;
   final String parentEmail;
 
-  ParentHomeScreen({required this.userName, required this.parentEmail});
+  const ParentHomeScreen({
+    required this.userName,
+    required this.parentEmail,
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  _ParentHomeScreenState createState() => _ParentHomeScreenState();
+}
+
+class _ParentHomeScreenState extends State<ParentHomeScreen> {
+  // Function to handle navigation
+  void _navigateToScreen(Widget screen) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => screen),
+    );
+  }
+
+  // Function to handle logout
+  void _logout() {
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => LoginPage()),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
-    final screenHeight = MediaQuery.of(context).size.height;
-
     return Scaffold(
-
-      body: Column(
-        children: [
-          // Header with avatar and name
-          Container(
-            color: Colors.green,
-            height: screenHeight * 0.25, // Set height to one-fourth of the screen
-            padding: EdgeInsets.symmetric(
-              vertical: screenHeight * 0.02,
-              horizontal: screenWidth * 0.04,
-            ),
-            child: Row(
-              children: [
-                CircleAvatar(
-                  radius: screenWidth * 0.07,
-                  backgroundImage: AssetImage('assets/avatar_placeholder.png'),
-                ),
-                SizedBox(width: screenWidth * 0.03),
-                Expanded(
-                  child: Text(
-                    'Hello $userName', // Correct string interpolation
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    // Navigate to Add Child Registration Screen
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => AddChildScreen(),
-                      ),
-                    );
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.white,
-                    foregroundColor: Colors.green,
-                  ),
-                  child: const Text('+ Add Child'),
-                ),
-              ],
-            ),
-          ),
-
-          // Body Content: Fetch and display child data
-          Expanded(
-            child: StreamBuilder<QuerySnapshot>(
-              stream: FirebaseFirestore.instance
-                  .collection('users')
-                  .where('parentEmail', isEqualTo: parentEmail)
-                  .where('role', isEqualTo: 'child') // Ensure only children are fetched
-                  .snapshots(),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(child: CircularProgressIndicator());
-                }
-                if (snapshot.hasError) {
-                  return Center(
-                    child: Text('Error: ${snapshot.error}'),
-                  );
-                }
-                if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-                  return const Center(
-                    child: Text(
-                      'No children registered yet. Add a child to view their details.',
-                      style: TextStyle(color: Colors.grey, fontSize: 16),
-                      textAlign: TextAlign.center,
-                    ),
-                  );
-                }
-
-                // Display list of children
-                return ListView.builder(
-                  itemCount: snapshot.data!.docs.length,
-                  itemBuilder: (context, index) {
-                    var childData = snapshot.data!.docs[index].data() as Map<String, dynamic>;
-                    return Container(
-                      padding: EdgeInsets.all(screenWidth * 0.04),
-                      margin: EdgeInsets.symmetric(
-                        vertical: screenHeight * 0.01,
-                        horizontal: screenWidth * 0.05,
-                      ),
-                      decoration: BoxDecoration(
-                        color: Colors.green[100],
-                        borderRadius: BorderRadius.circular(screenWidth * 0.02),
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Flexible(
-                            child: Text(
-                              childData['name'] ?? 'Unknown', // Child's name
-                              style: const TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                              ),
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ),
-                          Text(
-                            '${childData['age'] ?? 'N/A'} years', // Child's age
-                            style: const TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
-                      ),
-                    );
-                  },
-                );
-              },
-            ),
+      appBar: AppBar(
+        title: const Text('Parent Home'),
+        backgroundColor: const Color(0xFFFFDE59),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.logout),
+            onPressed: _logout,
           ),
         ],
       ),
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            // Home Container (takes full width)
+            _buildClickableContainer(
+              label: 'Register \nChildren',
+              imagePath: 'assets/children.png',
+              onTap: () => _navigateToScreen(
+                ParentHome(userName: widget.userName, parentEmail: widget.parentEmail),
+              ),
+              width: MediaQuery.of(context).size.width, // Full width
+              isHome: true, // Flag to indicate if it's the home container
+            ),
+            const SizedBox(height: 16),
+            // Row 1: Book Appointment and Status (each takes half the width)
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                _buildClickableContainer(
+                  label: 'Book Appointment',
+                  imagePath: 'assets/appointment.png',
+                  onTap: () => _navigateToScreen(
+                    BookAppointment(parentEmail: widget.parentEmail),
+                  ),
+                  width: MediaQuery.of(context).size.width * 0.45, // Half width
+                ),
+                _buildClickableContainer(
+                  label: 'Status',
+                  imagePath: 'assets/status.png',
+                  onTap: () => _navigateToScreen(
+                    AppointmentStatus(parentEmail: widget.parentEmail),
+                  ),
+                  width: MediaQuery.of(context).size.width * 0.45, // Half width
+                ),
+              ],
+            ),
+            const SizedBox(height: 16),
+            // Row 2: Education and Group Chat (each takes half the width)
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                _buildClickableContainer(
+                  label: 'Education',
+                  imagePath: 'assets/education.png',
+                  onTap: () => _navigateToScreen(EducationScreen()),
+                  width: MediaQuery.of(context).size.width * 0.45, // Half width
+                ),
+                _buildClickableContainer(
+                  label: 'Group Chat',
+                  imagePath: 'assets/groupchat.png',
+                  onTap: () => _navigateToScreen(GroupChat()),
+                  width: MediaQuery.of(context).size.width * 0.45, // Half width
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          // Navigate to the Chatbot screen
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => ChatScreen()),
+          );
+        },
+        backgroundColor: const Color(0xFFFFDE59),
+        child: const Icon(Icons.chat, color: Colors.white),
+      ),
+    );
+  }
 
-      // Bottom Navigation Bar
-      bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: Colors.green,
-        selectedItemColor: Colors.white,
-        unselectedItemColor: Colors.white,
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'Profile',
-          ),
-        ],
+  // Reusable clickable container widget with dynamic width and image size
+  Widget _buildClickableContainer({
+    required String label,
+    required String imagePath,
+    required VoidCallback onTap,
+    required double width, // Dynamic width for the container
+    bool isHome = false, // Flag to check if it's the Home screen
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        width: width, // Set width dynamically
+        height: isHome ? 150 : 120, // Increased height
+        decoration: BoxDecoration(
+          color: const Color(0xFFFFDE59),
+          borderRadius: BorderRadius.circular(16),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.2),
+              blurRadius: 6,
+              offset: Offset(2, 2),
+            ),
+          ],
+        ),
+        child: isHome
+            ? Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Image.asset(imagePath, height: 120, width: 120), // Increased image size
+                  const SizedBox(width: 16),
+                  Text(
+                    label,
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                      color: Colors.white, 
+                      fontSize: 24, // Increased font size
+                      fontWeight: FontWeight.bold, 
+                      letterSpacing: 1.5, 
+                      fontFamily: 'Montserrat',
+                    ),
+                  ),
+                ],
+              )
+            : Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Image.asset(imagePath, height: 64, width: 64), // Increased image size
+                  const SizedBox(height: 8),
+                  Text(
+                    label,
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                      color: Colors.white, 
+                      fontSize: 20, // Increased font size
+                      fontWeight: FontWeight.w600, 
+                      fontFamily: 'Montserrat', 
+                    ),
+                  ),
+                ],
+              ),
       ),
     );
   }
 }
-
-
-
-
-
-/*import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
-
-import 'kid_register.dart';
-
-class ParentHomeScreen extends StatelessWidget {
-  final String userName;
-  final String parentEmail; // Pass the parent's email dynamically
-
-  ParentHomeScreen({required this.userName, required this.parentEmail});
-
-  @override
-  Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
-    final screenHeight = MediaQuery.of(context).size.height;
-
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Home Screen'),
-        backgroundColor: Colors.green,
-      ),
-      body: Column(
-        children: [
-          // Header with avatar and name
-          Container(
-            color: Colors.green,
-            padding: EdgeInsets.symmetric(
-              vertical: screenHeight * 0.02,
-              horizontal: screenWidth * 0.04,
-            ),
-            child: Row(
-              children: [
-                CircleAvatar(
-                  radius: screenWidth * 0.08,
-                  backgroundImage: AssetImage('assets/avatar_placeholder.png'),
-                ),
-                SizedBox(width: screenWidth * 0.03),
-                Expanded(
-                  child: Text(
-                    'Hello ${userName}', // Correct string interpolation
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    // Navigate to Add Child Registration Screen
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => AddChildScreen()),
-                    );
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.white,
-                    foregroundColor: Colors.green,
-                  ),
-                  child: const Text('+ Add Child'),
-                ),
-              ],
-            ),
-          ),
-
-
-          // Body Content: Fetch and display child data
-          Expanded(
-            child: StreamBuilder<QuerySnapshot>(
-              stream: FirebaseFirestore.instance
-                  .collection('users')
-                  .where('parentEmail', isEqualTo: parentEmail)
-                  .where('role', isEqualTo: 'child') // Filter for children
-                  .snapshots(),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(child: CircularProgressIndicator());
-                }
-                if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-                  return const Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          'No data found',
-                          style: TextStyle(color: Colors.grey, fontSize: 16),
-                        ),
-                        Text(
-                          'First add child',
-                          style: TextStyle(color: Colors.grey, fontSize: 16),
-                        ),
-                      ],
-                    ),
-                  );
-                }
-
-                // Display list of children
-                return ListView.builder(
-                  itemCount: snapshot.data!.docs.length,
-                  itemBuilder: (context, index) {
-                    var childData = snapshot.data!.docs[index].data() as Map<String, dynamic>;
-                    return Container(
-                      padding: EdgeInsets.all(screenWidth * 0.04),
-                      margin: EdgeInsets.symmetric(
-                        vertical: screenHeight * 0.01,
-                        horizontal: screenWidth * 0.05,
-                      ),
-                      decoration: BoxDecoration(
-                        color: Colors.green[100],
-                        borderRadius: BorderRadius.circular(screenWidth * 0.02),
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Flexible(
-                            child: Text(
-                              childData['name'], // Child's name
-                              style: const TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                              ),
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ),
-                          Text(
-                            '${childData['age']} years', // Child's age
-                            style: const TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
-                      ),
-                    );
-                  },
-                );
-              },
-            ),
-          ),
-        ],
-      ),
-
-      // Bottom Navigation Bar
-      bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: Colors.green,
-        selectedItemColor: Colors.white,
-        unselectedItemColor: Colors.white,
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'Profile',
-          ),
-        ],
-      ),
-    );
-  }
-}*/
-
-
-
-

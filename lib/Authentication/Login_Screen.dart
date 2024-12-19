@@ -76,6 +76,11 @@ class _LoginPageState extends State<LoginPage> {
       String role = userData['role'] as String;
       String username = userData['username'] ?? userData['name'] ?? ''; // Fallback to 'name' for child users
 
+      // Fetch the parentId (assuming it's stored as a field in Firestore)
+      String parentId = userData['parentId'] ?? ''; // Replace with the actual field name if different
+
+      // Fetch the doctorId (if the role is 'psychiatrist')
+      String doctorId = userData['doctorId'] ?? ''; // Replace with the actual field name for psychiatrist users
 
       if (role.toLowerCase() != _selectedRole!.toLowerCase()) {
         setState(() {
@@ -84,19 +89,22 @@ class _LoginPageState extends State<LoginPage> {
         return;
       }
 
-
       switch (role.toLowerCase()) {
-        case 'parent':
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (context) => ParentHomeScreen(
-                userName: username,
-                parentEmail: email,
-              ),
-            ),
-          );
-          break;
+  case 'parent':
+  Navigator.pushReplacement(
+    context,
+    MaterialPageRoute(
+      builder: (context) => ParentHomeScreen(
+        userName: username,
+        parentEmail: email,
+      //  parentId: parentId, // Pass parentId here
+       // Pass doctorId here as well
+      ),
+    ),
+  );
+  break;
+
+     
         case 'child':
           final String uid = user.uid; // Get the user ID from FirebaseAuth
           Navigator.pushReplacement(
@@ -108,13 +116,15 @@ class _LoginPageState extends State<LoginPage> {
               ),
             ),
           );
-          break;
+           break;
         case 'psychiatrist':
+          // Pass the doctorId to the PsychiatristHomePage
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(
               builder: (context) => PsychiatristHomePage(
                 userName: username,
+                //doctorId: doctorname, // Pass the doctorId here
               ),
             ),
           );
@@ -131,8 +141,6 @@ class _LoginPageState extends State<LoginPage> {
       print('Login error: $e');
     }
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -317,4 +325,3 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 }
-
