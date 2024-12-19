@@ -3,6 +3,10 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:final_year_project/firebase_options.dart';
+=======
+import 'Authentication/Login_Screen.dart';
+import 'Authentication/splash_screen.dart';
+import 'firebase_options.dart';
 
 
 void main() async {
@@ -47,6 +51,7 @@ class _SplashScreenState extends State<SplashScreen> {
       body: Center(
         child: Lottie.asset('assets/fyp.json', width: 250, height: 250),
       ),
+=======
     );
   }
 }

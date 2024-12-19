@@ -37,7 +37,7 @@ class _AddChildScreenState extends State<AddChildScreen> {
         // Save child data to Firestore under 'users' collection
         await FirebaseFirestore.instance.collection('users').doc(userCredential.user!.uid).set({
           'name': _nameController.text,
-          'age': _ageController.text,
+          'age': int.tryParse(_ageController.text) ?? 0, // Convert to integer
           'email': _emailController.text,
           'parentEmail': parentEmail, // Save parent's email
           'role': 'child', // Set role to 'child'
@@ -101,9 +101,10 @@ class _AddChildScreenState extends State<AddChildScreen> {
                     return 'Please enter the age';
                   }
                   final age = int.tryParse(value);
-                  if (age == null || age < 5 || age > 17) {
+                  if (age == null || age < 5 || age > 19) {
                     return 'Age must be between 5 and 17 years';
                   }
+
                   return null;
                 },
               ),

@@ -101,9 +101,9 @@ class _RegisterPageState extends State<RegisterPage> {
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Color(0xFFFDFAF7),
       appBar: AppBar(
-        backgroundColor: Colors.green[400],
+        backgroundColor: Color(0xFF5c724a),
         elevation: 0,
         title: Text('Register', style: TextStyle(color: Colors.white)),
         centerTitle: true,
@@ -120,7 +120,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 style: TextStyle(
                   fontSize: 28,
                   fontWeight: FontWeight.bold,
-                  color: Colors.green[400],
+                  color: Color(0xFF5c724a),
                 ),
               ),
               SizedBox(height: 8),
@@ -178,7 +178,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       controller: _nameController,
                       decoration: InputDecoration(
                         labelText: 'Full Name',
-                        prefixIcon: Icon(Icons.person, color: Colors.green[400]),
+                        prefixIcon: Icon(Icons.person, color: Color(0xFF5c724a)),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12.0),
                           borderSide: BorderSide.none,
@@ -192,7 +192,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       controller: _emailController,
                       decoration: InputDecoration(
                         labelText: 'Email',
-                        prefixIcon: Icon(Icons.email, color: Colors.green[400]),
+                        prefixIcon: Icon(Icons.email, color: Color(0xFF5c724a)),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12.0),
                           borderSide: BorderSide.none,
@@ -207,11 +207,11 @@ class _RegisterPageState extends State<RegisterPage> {
                       obscureText: !_isPasswordVisible,
                       decoration: InputDecoration(
                         labelText: 'Password',
-                        prefixIcon: Icon(Icons.lock, color: Colors.green[400]),
+                        prefixIcon: Icon(Icons.lock, color: Color(0xFF5c724a)),
                         suffixIcon: IconButton(
                           icon: Icon(
                             _isPasswordVisible ? Icons.visibility : Icons.visibility_off,
-                            color: Colors.green[400],
+                            color: Color(0xFF5c724a),
                           ),
                           onPressed: () {
                             setState(() {
@@ -235,7 +235,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 onPressed: _register,
                 style: ElevatedButton.styleFrom(
                   minimumSize: Size(screenWidth * 0.8, 50),
-                  backgroundColor: Colors.green[400],
+                  backgroundColor: Color(0xFF5c724a),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12.0),
                   ),
@@ -263,7 +263,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 },
                 child: Text(
                   "Already have an account? Log in",
-                  style: TextStyle(color: Colors.green[400], fontSize: 16),
+                  style: TextStyle(color: Color(0xFF5c724a), fontSize: 16),
                 ),
               ),
             ],
