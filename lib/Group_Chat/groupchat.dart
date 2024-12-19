@@ -11,14 +11,10 @@ class _GroupChatState extends State<GroupChat> {
   final TextEditingController _messageController = TextEditingController();
   final ScrollController _scrollController = ScrollController();
 
-  // Firestore collection reference
   final CollectionReference _chatCollection =
-      FirebaseFirestore.instance.collection('groupChats');
-
-  // Current user details
+  FirebaseFirestore.instance.collection('groupChats');
   final User? _currentUser = FirebaseAuth.instance.currentUser;
 
-  // Send a message
   Future<void> _sendMessage() async {
     if (_messageController.text.trim().isEmpty || _currentUser == null) return;
 
@@ -26,41 +22,33 @@ class _GroupChatState extends State<GroupChat> {
     final String messageText = _messageController.text.trim();
 
     try {
-      // Document reference for the group chat
-      final DocumentReference chatDocRef = _chatCollection.doc('29nRlKGzgqEnnpLC8dZ9');
-
-      // Check if the document exists
+      final DocumentReference chatDocRef =
+      _chatCollection.doc('29nRlKGzgqEnnpLC8dZ9');
       final DocumentSnapshot docSnapshot = await chatDocRef.get();
+
       if (!docSnapshot.exists) {
-        print("Document does not exist.");
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Failed to send message. Document not found.')),
         );
         return;
       }
 
-      // Prepare the message data
       final messageData = {
         'senderName': userName,
         'text': messageText,
       };
 
-      // Add the message to the group's message array
       await chatDocRef.update({
         'messages': FieldValue.arrayUnion([messageData]),
       });
 
-      // Clear the message input field
       _messageController.clear();
-
-      // Scroll to the bottom of the chat
       _scrollController.animateTo(
         _scrollController.position.maxScrollExtent,
         duration: Duration(milliseconds: 300),
         curve: Curves.easeOut,
       );
     } catch (e) {
-      print("Error sending message: $e");
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Failed to send message. Please try again.')),
       );
@@ -72,73 +60,119 @@ class _GroupChatState extends State<GroupChat> {
     return Scaffold(
       appBar: AppBar(
         title: Text("Group Chat"),
-        backgroundColor: Colors.green,
+        backgroundColor: Color(0xFF373e37), // Dark greenish shade
+        titleTextStyle: TextStyle(
+          color: Colors.white,
+          fontSize: 20,
+          fontWeight: FontWeight.bold,
+        ),
       ),
-      body: Column(
-        children: [
-          Expanded(
-            child: StreamBuilder<DocumentSnapshot>(
-              stream: _chatCollection.doc('29nRlKGzgqEnnpLC8dZ9').snapshots(),
-              builder: (context, snapshot) {
-                if (!snapshot.hasData) {
-                  return Center(child: CircularProgressIndicator());
-                }
+      body: Container(
+        color: Color(0xFFF5F5F5), // Off-white background color
+        child: Column(
+          children: [
+            Expanded(
+              child: StreamBuilder<DocumentSnapshot>(
+                stream: _chatCollection.doc('29nRlKGzgqEnnpLC8dZ9').snapshots(),
+                builder: (context, snapshot) {
+                  if (!snapshot.hasData) {
+                    return Center(child: CircularProgressIndicator());
+                  }
 
-                final data = snapshot.data!.data() as Map<String, dynamic>?;
-                if (data == null || data['messages'] == null) {
-                  return Center(child: Text('No messages yet'));
-                }
+                  final data = snapshot.data!.data() as Map<String, dynamic>?;
+                  if (data == null || data['messages'] == null) {
+                    return Center(child: Text('No messages yet'));
+                  }
 
-                final messages = List<Map<String, dynamic>>.from(data['messages']);
-                final userName = _currentUser!.email!.split('@')[0] ?? "Anonymous";
+                  final messages =
+                  List<Map<String, dynamic>>.from(data['messages']);
+                  final userName = _currentUser!.email!.split('@')[0] ?? "Anonymous";
 
-                return ListView.builder(
-                  controller: _scrollController,
-                  itemCount: messages.length,
-                  itemBuilder: (context, index) {
-                    final msg = messages[index];
-                    final text = msg['text'] ?? '';
-                    final senderName = msg['senderName'] ?? 'Unknown';
+                  return ListView.builder(
+                    controller: _scrollController,
+                    itemCount: messages.length,
+                    itemBuilder: (context, index) {
+                      final msg = messages[index];
+                      final text = msg['text'] ?? '';
+                      final senderName = msg['senderName'] ?? 'Unknown';
+                      final isCurrentUser = senderName == userName;
 
-                    return ListTile(
-                      title: Text(
-                        senderName,
-                        style: TextStyle(fontWeight: FontWeight.bold, color: Colors.green),
-                      ),
-                      subtitle: Text(text),
-                    );
-                  },
-                );
-              },
+                      return Align(
+                        alignment: isCurrentUser
+                            ? Alignment.centerRight
+                            : Alignment.centerLeft,
+                        child: Container(
+                          margin: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                          padding: EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                            color: isCurrentUser
+                                ? Color(0xFFF7B4C6) // Pink for sent messages
+                                : Color(0xFF373e37), // Dark greenish for received messages
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                          child: Column(
+                            crossAxisAlignment: isCurrentUser
+                                ? CrossAxisAlignment.end
+                                : CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                senderName,
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                ),
+                              ),
+                              SizedBox(height: 5),
+                              Text(
+                                text,
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  );
+                },
+              ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
-              children: [
-                Expanded(
-                  child: TextField(
-                    controller: _messageController,
-                    decoration: InputDecoration(
-                      hintText: "Type a message...",
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(20),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(25),
+                ),
+                padding: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: TextField(
+                        controller: _messageController,
+                        decoration: InputDecoration(
+                          hintText: "Type a message...",
+                          border: InputBorder.none,
+                        ),
+                        style: TextStyle(color: Colors.black),
                       ),
                     ),
-                  ),
+                    CircleAvatar(
+                      backgroundColor: Colors.white,
+                      child: IconButton(
+                        icon: Icon(Icons.send, color: Colors.black),
+                        onPressed: _sendMessage,
+                      ),
+                    ),
+                  ],
                 ),
-                SizedBox(width: 8),
-                CircleAvatar(
-                  backgroundColor: Colors.green,
-                  child: IconButton(
-                    icon: Icon(Icons.send, color: Colors.white),
-                    onPressed: _sendMessage,
-                  ),
-                ),
-              ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

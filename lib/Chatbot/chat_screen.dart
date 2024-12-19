@@ -34,27 +34,29 @@ class _ChatScreenState extends State<ChatScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Chatbot'),
-        backgroundColor: Colors.green[700],
+        backgroundColor: const Color(0xFF373E37), // Black
+        foregroundColor: Colors.white, // White text
       ),
-      body: Column(
-        children: [
-          Expanded(
-            child: Container(
-              color: Colors.green[50],
+      body: Container(
+        color: const Color(0xFFFAF9F6), // Off-white background
+        child: Column(
+          children: [
+            Expanded(
               child: ListView.builder(
                 itemCount: _messages.length,
                 itemBuilder: (context, index) {
                   final message = _messages[index];
                   final isUser = message.containsKey('user');
 
-                  // Animation for message bubbles
-                  return AnimatedContainer(
-                    duration: Duration(milliseconds: 300),
-                    curve: Curves.easeInOut,
-                    margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+                  // Styling for message bubbles
+                  return Container(
+                    margin:
+                    const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
                     padding: const EdgeInsets.all(12),
                     decoration: BoxDecoration(
-                      color: isUser ? Colors.green[200] : Colors.white,
+                      color: isUser
+                          ? const Color(0xFFFFDE59) // Yellow for user
+                          : const Color(0xFF373E37), // Black for bot
                       borderRadius: BorderRadius.only(
                         topLeft: const Radius.circular(12),
                         topRight: const Radius.circular(12),
@@ -76,53 +78,57 @@ class _ChatScreenState extends State<ChatScreen> {
                       isUser ? message['user']! : message['bot']!,
                       style: TextStyle(
                         fontSize: 16,
-                        color: isUser ? Colors.black87 : Colors.black54,
+                        color: isUser
+                            ? Colors.black87 // Dark text for user
+                            : Colors.white, // White text for bot
                       ),
                     ),
                   );
                 },
               ),
             ),
-          ),
-          if (_isLoading)
-            const Padding(
-              padding: EdgeInsets.all(8.0),
-              child: CircularProgressIndicator(),
-            ),
-          Padding(
-            padding: const EdgeInsets.all(12.0),
-            child: Row(
-              children: [
-                Expanded(
-                  child: TextField(
-                    controller: _controller,
-                    decoration: InputDecoration(
-                      filled: true,
-                      fillColor: Colors.white,
-                      hintText: 'Type your message...',
-                      hintStyle: TextStyle(color: Colors.grey[400]),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide.none,
+            if (_isLoading)
+              const Padding(
+                padding: EdgeInsets.all(8.0),
+                child: CircularProgressIndicator(
+                  color: Color(0xFF373E37), // Black for loader
+                ),
+              ),
+            Padding(
+              padding: const EdgeInsets.all(12.0),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: TextField(
+                      controller: _controller,
+                      decoration: InputDecoration(
+                        filled: true,
+                        fillColor: const Color(0xFFFFFFFF), // White input field
+                        hintText: 'Type your message...',
+                        hintStyle: TextStyle(color: Colors.grey[400]),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: BorderSide.none,
+                        ),
+                        contentPadding:
+                        const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
                       ),
-                      contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
                     ),
                   ),
-                ),
-                const SizedBox(width: 8),
-                GestureDetector(
-                  onTap: () => _sendMessage(_controller.text),
-                  child: CircleAvatar(
-                    backgroundColor: Colors.green,
-                    child: Icon(Icons.send, color: Colors.white),
+                  const SizedBox(width: 8),
+                  GestureDetector(
+                    onTap: () => _sendMessage(_controller.text),
+                    child: CircleAvatar(
+                      backgroundColor: const Color(0xFF373E37), // Black send button
+                      child: const Icon(Icons.send, color: Colors.white),
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
-      backgroundColor: Colors.green[50],
     );
   }
 }

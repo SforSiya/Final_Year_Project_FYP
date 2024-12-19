@@ -64,8 +64,9 @@ class _AddChildScreenState extends State<AddChildScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Add Child'),
-        backgroundColor: Colors.green,
+        backgroundColor: Color(0xFFFFDE59), // Yellow shade
       ),
+      backgroundColor: Color(0xFFFAF9F6), // Off-white background color
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Form(
@@ -77,6 +78,10 @@ class _AddChildScreenState extends State<AddChildScreen> {
                 controller: _nameController,
                 decoration: InputDecoration(
                   labelText: 'Name',
+                  labelStyle: TextStyle(color: Color(0xFF373E37)), // Dark greenish text color
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Color(0xFFFFDE59)), // Yellow border on focus
+                  ),
                   border: OutlineInputBorder(),
                 ),
                 validator: (value) {
@@ -94,6 +99,10 @@ class _AddChildScreenState extends State<AddChildScreen> {
                 keyboardType: TextInputType.number,
                 decoration: InputDecoration(
                   labelText: 'Age',
+                  labelStyle: TextStyle(color: Color(0xFF373E37)), // Dark greenish text color
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Color(0xFFFFDE59)), // Yellow border on focus
+                  ),
                   border: OutlineInputBorder(),
                 ),
                 validator: (value) {
@@ -102,9 +111,8 @@ class _AddChildScreenState extends State<AddChildScreen> {
                   }
                   final age = int.tryParse(value);
                   if (age == null || age < 5 || age > 19) {
-                    return 'Age must be between 5 and 17 years';
+                    return 'Age must be between 5 and 19 years';
                   }
-
                   return null;
                 },
               ),
@@ -116,6 +124,10 @@ class _AddChildScreenState extends State<AddChildScreen> {
                 keyboardType: TextInputType.emailAddress,
                 decoration: InputDecoration(
                   labelText: 'Email',
+                  labelStyle: TextStyle(color: Color(0xFF373E37)), // Dark greenish text color
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Color(0xFFFFDE59)), // Yellow border on focus
+                  ),
                   border: OutlineInputBorder(),
                 ),
                 validator: (value) {
@@ -133,6 +145,10 @@ class _AddChildScreenState extends State<AddChildScreen> {
                 obscureText: true,
                 decoration: InputDecoration(
                   labelText: 'Password',
+                  labelStyle: TextStyle(color: Color(0xFF373E37)), // Dark greenish text color
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Color(0xFFFFDE59)), // Yellow border on focus
+                  ),
                   border: OutlineInputBorder(),
                 ),
                 validator: (value) {
@@ -148,7 +164,8 @@ class _AddChildScreenState extends State<AddChildScreen> {
               ElevatedButton(
                 onPressed: _registerChild,
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.green,
+                  backgroundColor: Color(0xFFFFDE59), // Yellow button color
+                  foregroundColor: Color(0xFF373E37), // Dark greenish text color for button text
                 ),
                 child: const Text('Register Child'),
               ),

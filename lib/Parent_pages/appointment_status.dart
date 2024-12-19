@@ -9,9 +9,13 @@ class AppointmentStatus extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color(0xFFF7F7F7), // Set off-white background color
       appBar: AppBar(
-        title: const Text('Appointment Status'),
-        backgroundColor: Colors.green,
+        title: const Text(
+          'Appointment Status',
+          style: TextStyle(color: Colors.white), // White text color for AppBar
+        ),
+        backgroundColor: Colors.black, // Full black AppBar
       ),
       body: StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance
@@ -50,25 +54,31 @@ class AppointmentStatus extends StatelessWidget {
             padding: const EdgeInsets.all(16.0),
             itemCount: snapshot.data!.docs.length,
             itemBuilder: (context, index) {
-              var appointment =
-                  snapshot.data!.docs[index].data() as Map<String, dynamic>;
+              var appointment = snapshot.data!.docs[index].data() as Map<String, dynamic>;
               String status = appointment['status'] ?? 'Unknown';
               Color statusColor;
+              Color containerColor;
+
               switch (status.toLowerCase()) {
                 case 'accepted':
-                  statusColor = Colors.green;
+                  statusColor = Colors.yellow.shade800;
+                  containerColor = const Color(0xFFFFDE59);
                   break;
                 case 'pending':
-                  statusColor = Colors.orange;
+                  statusColor = Colors.pink.shade600;
+                  containerColor = const Color(0xFFF7B4C6);
                   break;
                 case 'rejected':
-                  statusColor = Colors.red;
+                  statusColor = Colors.black;
+                  containerColor = const Color(0xFF373E37);
                   break;
                 default:
                   statusColor = Colors.grey;
+                  containerColor = Colors.grey.shade200;
               }
 
               return Card(
+                color: containerColor,
                 elevation: 4,
                 margin: const EdgeInsets.symmetric(vertical: 8.0),
                 shape: RoundedRectangleBorder(
@@ -79,11 +89,11 @@ class AppointmentStatus extends StatelessWidget {
                   leading: CircleAvatar(
                     backgroundColor: statusColor,
                     child: Icon(
-                      status == 'accepted'
+                      status.toLowerCase() == 'accepted'
                           ? Icons.check
-                          : status == 'rejected'
-                              ? Icons.close
-                              : Icons.hourglass_empty,
+                          : status.toLowerCase() == 'rejected'
+                          ? Icons.close
+                          : Icons.hourglass_empty,
                       color: Colors.white,
                     ),
                   ),
