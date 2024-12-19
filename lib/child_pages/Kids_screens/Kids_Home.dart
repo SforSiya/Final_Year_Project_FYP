@@ -7,7 +7,6 @@ import 'Progress_page/progress_screen.dart';
 import 'Reading_pages/Reading.dart';
 import 'games/games_page.dart';
 
-
 class KidsHome extends StatefulWidget {
   const KidsHome({Key? key}) : super(key: key);
 
@@ -16,9 +15,8 @@ class KidsHome extends StatefulWidget {
 }
 
 class _KidsHomeState extends State<KidsHome> {
-  int _selectedIndex = 0; // For keeping track of the selected tab
+  int _selectedIndex = 0;
 
-  // List of screens to display in Bottom Navigation Bar
   List<Widget> _screens() {
     return [
       buildHomeScreen(),
@@ -34,90 +32,24 @@ class _KidsHomeState extends State<KidsHome> {
 
   Widget buildHomeScreen() {
     return SingleChildScrollView(
-      child: Padding(
-        padding: const EdgeInsets.only(top: 40.0, left: 16.0, right: 16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Center(
-              child: StreamBuilder<DocumentSnapshot>(
-                stream: FirebaseFirestore.instance
-                    .collection('users')
-                    .doc(FirebaseAuth.instance.currentUser!.uid)
-                    .collection('kids_data')
-                    .doc('child_profile')
-                    .snapshots(),
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return Column(
-                      children: const [
-                        CircleAvatar(
-                          radius: 50,
-                          backgroundImage: AssetImage(
-                              'assets/kids/auto_profile.png'),
-                        ),
-                        SizedBox(height: 16),
-                        Text('Good Morning,'),
-                        Text('Loading...', style: TextStyle(
-                            fontWeight: FontWeight.bold)),
-                      ],
-                    );
-                  }
-
-                  if (snapshot.hasError || !snapshot.hasData ||
-                      !snapshot.data!.exists) {
-                    return Column(
-                      children: const [
-                        CircleAvatar(
-                          radius: 50,
-                          backgroundImage: AssetImage(
-                              'assets/kids/auto_profile.png'),
-                        ),
-                        SizedBox(height: 16),
-                        Text('Good Morning,'),
-                        Text('Guest', style: TextStyle(fontWeight: FontWeight
-                            .bold)),
-                      ],
-                    );
-                  }
-
-                  Map<String, dynamic> profileData = snapshot.data!
-                      .data() as Map<String, dynamic>;
-
-                  String name = profileData['name'] ?? 'Guest';
-                  String avatar = profileData['avatar'] ??
-                      'assets/kids/auto_profile.png';
-
-                  return Column(
-                    children: [
-                      CircleAvatar(
-                        radius: 50,
-                        backgroundImage: avatar.startsWith('assets')
-                            ? AssetImage(avatar) as ImageProvider
-                            : NetworkImage(avatar),
-                      ),
-                      const SizedBox(height: 16),
-                      const Text(
-                        'Good Morning,',
-                        style: TextStyle(fontSize: 18, color: Color(
-                            0xFFFF9F29)),
-                      ),
-                      Text(
-                        name,
-                        style: const TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                          color: Color(0xFFFF9F29),
-                        ),
-                      ),
-                    ],
-                  );
-                },
-              ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Add a picture below the app bar
+          Container(
+            margin: const EdgeInsets.only(top: 8.0),
+            width: double.infinity,
+            child: Image.asset(
+              'assets/kids/kids_home.png', // Replace with your image path
+              height: 200,
+              fit: BoxFit.cover,
             ),
-            const SizedBox(height: 32),
-            // Grid section
-            GridView.count(
+          ),
+          const SizedBox(height: 16),
+          // Grid section
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: GridView.count(
               crossAxisCount: 2,
               crossAxisSpacing: 16.0,
               mainAxisSpacing: 16.0,
@@ -126,40 +58,40 @@ class _KidsHomeState extends State<KidsHome> {
               children: [
                 buildGridItem(
                   context,
-                  'assets/kids/games_icon.png',
+                  'assets/images/games.png',
                   'Numbers',
                   'All about number',
                   const NumbersPage(),
-                  const Color(0xFFFFF5E5),
+                  const Color(0xFFf7b4c6),
                 ),
                 buildGridItem(
                   context,
-                  'assets/kids/reading_icon.png',
+                  'assets/images/learning.png',
                   'Reading',
                   'Reading some words',
-                   ReadingPage(),
-                  const Color(0xFFFFF5E5),
+                  ReadingPage(),
+                  const Color(0xFF3c5b61),
                 ),
                 buildGridItem(
                   context,
-                  'assets/kids/Progress_icon.png',
+                  'assets/images/Progress.png',
                   'Progress',
                   'See your progress',
                   ProgressGraphScreen(userId: 'userId'),
-                  const Color(0xFFFFF5E5),
+                  const Color(0xFFfdbd46),
                 ),
                 buildGridItem(
                   context,
-                  'assets/kids/shapes_icon.png',
+                  'assets/images/shapes.png',
                   'Shapes',
                   'Learn shapes',
                   ShapesPage(),
-                  const Color(0xFFFFF5E5),
+                  const Color(0xFFffde59),
                 ),
               ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -182,7 +114,14 @@ class _KidsHomeState extends State<KidsHome> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Image.asset(imagePath, width: 60, height: 60),
+            Flexible(
+              child: Image.asset(
+                imagePath,
+                width: MediaQuery.of(context).size.width * 0.3,
+                height: MediaQuery.of(context).size.width * 0.3,
+                fit: BoxFit.contain,
+              ),
+            ),
             const SizedBox(height: 12),
             Text(
               title,
@@ -206,10 +145,71 @@ class _KidsHomeState extends State<KidsHome> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF354A2F),
-      // Set the background color
+      backgroundColor: const Color(0xFFFFFFFF),
+      appBar: AppBar(
+        backgroundColor: Colors.orange.shade100,
+        elevation: 0,
+        centerTitle: true,
+        title: StreamBuilder<DocumentSnapshot>(
+          stream: FirebaseFirestore.instance
+              .collection('users')
+              .doc(FirebaseAuth.instance.currentUser!.uid)
+              .collection('kids_data')
+              .doc('child_profile')
+              .snapshots(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Column(
+                children: const [
+                  CircleAvatar(
+                    radius: 20,
+                    backgroundImage: AssetImage('assets/kids/auto_profile.png'),
+                  ),
+                  SizedBox(height: 4),
+                  Text('Hello, Loading...',
+                      style: TextStyle(fontSize: 16)),
+                ],
+              );
+            }
+
+            if (snapshot.hasError || !snapshot.hasData || !snapshot.data!.exists) {
+              return Column(
+                children: const [
+                  CircleAvatar(
+                    radius: 20,
+                    backgroundImage: AssetImage('assets/kids/auto_profile.png'),
+                  ),
+                  SizedBox(width: 4),
+                  Text('Hello, Guest', style: TextStyle(fontSize: 16)),
+                ],
+              );
+            }
+
+            Map<String, dynamic> profileData =
+            snapshot.data!.data() as Map<String, dynamic>;
+            String name = profileData['name'] ?? 'Guest';
+            String avatar = profileData['avatar'] ??
+                'assets/kids/auto_profile.png';
+
+            return Row(
+              children: [
+                CircleAvatar(
+                  radius: 20,
+                  backgroundImage: avatar.startsWith('assets')
+                      ? AssetImage(avatar) as ImageProvider
+                      : NetworkImage(avatar),
+                ),
+                const SizedBox(width: 4),
+                Text(
+                  'Hello, $name',
+                  style: const TextStyle(fontSize: 16),
+                ),
+              ],
+            );
+          },
+        ),
+      ),
       body: _screens()[_selectedIndex],
-      // Displays either Home or Profile screen
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
@@ -230,4 +230,3 @@ class _KidsHomeState extends State<KidsHome> {
     );
   }
 }
-

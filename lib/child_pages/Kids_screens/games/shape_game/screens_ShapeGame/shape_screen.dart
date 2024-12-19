@@ -1,8 +1,8 @@
+import 'package:final_year_project/child_pages/Kids_screens/games/shape_game/screens_ShapeGame/result_shape_screen.dart';
 import 'package:flutter/material.dart';
 import 'dart:math';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:final_year_project/child_pages/Kids_screens/games/shape_game/screens_ShapeGame/result_shape_screen.dart';
 
 class ShapeScreen extends StatefulWidget {
   @override
@@ -10,23 +10,57 @@ class ShapeScreen extends StatefulWidget {
 }
 
 class _ShapeScreenState extends State<ShapeScreen> {
-  List<String> shapes = ['Circle', 'Square', 'Triangle']; // Sample shapes
+  final List<String> shapes = [
+    'Rectangle',
+    'Circle',
+    'Square',
+    'Triangle',
+    'Pentagon',
+    'Quadrilateral',
+    'Star',
+    'Diamond',
+    'Heart',
+  ];
+
+  final Map<String, String> shapeImages = {
+    'Rectangle': 'assets/shapes/rectangle.png',
+    'Circle': 'assets/shapes/circle.png',
+    'Square': 'assets/shapes/square.png',
+    'Triangle': 'assets/shapes/triangle.png',
+    'Pentagon': 'assets/shapes/pentagon.png',
+    'Quadrilateral': 'assets/shapes/quadrilateral.png',
+    'Star': 'assets/shapes/star.png',
+    'Diamond': 'assets/shapes/diamond.png',
+    'Heart': 'assets/shapes/heart.png',
+  };
+
   Random random = Random();
   int currentShapeIndex = 0;
-  List<String> options = [];
-  int correctAnswers = 0;
   int questionCount = 0;
-  int totalQuestions = 5;
+  int correctAnswers = 0;
+  List<String> options = [];
   String? userId;
+  bool isAnswerSelected = false;
+  bool isAnswerCorrect = false;
+  String feedbackMessage = '';
+  final int totalQuestions = 8;
 
   @override
   void initState() {
     super.initState();
-    _generateNewShape();
     _getCurrentUserId();
+    _generateNewShape();
   }
 
-  // Firebase score-saving method
+  Future<void> _getCurrentUserId() async {
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      setState(() {
+        userId = user.uid;
+      });
+    }
+  }
+
   Future<void> _saveScoreToFirebase(int score) async {
     if (userId != null) {
       CollectionReference progressRef = FirebaseFirestore.instance
@@ -54,17 +88,6 @@ class _ShapeScreenState extends State<ShapeScreen> {
     }
   }
 
-  // Fetch current user ID
-  Future<void> _getCurrentUserId() async {
-    User? user = FirebaseAuth.instance.currentUser;
-    if (user != null) {
-      setState(() {
-        userId = user.uid;
-      });
-    }
-  }
-
-  // Generate a new shape and options for the game
   void _generateNewShape() async {
     if (questionCount < totalQuestions) {
       setState(() {
@@ -78,81 +101,119 @@ class _ShapeScreenState extends State<ShapeScreen> {
           }
         }
         options.shuffle();
+        isAnswerSelected = false; // Reset selection status
+        isAnswerCorrect = false;  // Reset answer correctness
+        feedbackMessage = '';     // Clear feedback message
         questionCount++;
       });
     } else {
-      // Save the score when the game ends
+      // Save score and navigate to the result screen
       await _saveScoreToFirebase(correctAnswers);
-
-      // Navigate to the result screen, passing userId
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
           builder: (_) => ResultScreenShape(
             score: correctAnswers,
             totalQuestions: totalQuestions,
-            userId: userId!,
           ),
         ),
       );
     }
   }
 
-  // Handling answer selection
-  void _handleAnswer(String selectedShape) {
-    if (selectedShape == shapes[currentShapeIndex]) {
-      setState(() {
+
+  void _checkAnswer(String selectedShape) {
+    setState(() {
+      isAnswerSelected = true; // Answer is selected
+
+      if (selectedShape == shapes[currentShapeIndex]) {
         correctAnswers++;
-      });
-    }
-    _generateNewShape();
+        isAnswerCorrect = true;
+        feedbackMessage = 'Correct!';
+      } else {
+        isAnswerCorrect = false;
+        feedbackMessage = 'Try Again!';
+      }
+    });
+
+    // Generate a new shape after a short delay
+    Future.delayed(Duration(seconds: 1), () {
+      _generateNewShape();
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    // Get the size of the device's screen
-    var screenSize = MediaQuery.of(context).size;
-    var height = screenSize.height;
-    var width = screenSize.width;
-
     return Scaffold(
-      appBar: AppBar(title: Text('Shape Game')),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          // Responsive text size based on screen width
-          Text(
-            'Identify the Shape',
-            style: TextStyle(fontSize: width * 0.06), // 6% of screen width
+      appBar: AppBar(
+        title: Text('Shape Recognition Game'),
+        backgroundColor: Color(0xFF1572A1),
+      ),
+      body: Container(
+        width: double.infinity,  // Ensures full screen width
+        height: double.infinity, // Ensures full screen height
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Color(0xFFDEEDF0), Color(0xFF9AD0EC)],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
           ),
-          SizedBox(height: height * 0.02), // 2% of screen height
-
-          // Responsive shape text size
-          Text(
-            shapes[currentShapeIndex],
-            style: TextStyle(fontSize: width * 0.12), // 12% of screen width
-          ),
-          SizedBox(height: height * 0.03), // 3% of screen height
-
-          // Responsive button layout
-          Column(
-            children: options.map((option) {
-              return Padding(
-                padding: EdgeInsets.symmetric(vertical: height * 0.01),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              'Guess the Shape!',
+              style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
+            ),
+            SizedBox(height: 30),
+            Image.asset(
+              shapeImages[shapes[currentShapeIndex]]!,
+              width: 150,
+              height: 150,
+            ),
+            SizedBox(height: 20),
+            // Display feedback (Correct or Try Again) after the user answers
+            Text(
+              feedbackMessage,
+              style: TextStyle(
+                fontSize: 24,
+                color: isAnswerCorrect ? Colors.green : Colors.red,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            SizedBox(height: 20),
+            // Display options as rectangular buttons in a row with consistent size
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: options.map((option) => Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8.0),
                 child: ElevatedButton(
-                  onPressed: () => _handleAnswer(option),
                   style: ElevatedButton.styleFrom(
-                    minimumSize: Size(width * 0.7, height * 0.07), // Button size 70% width and 7% height
+                    backgroundColor: Colors.pinkAccent, // Button color
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.zero, // No rounded corners
+                    ),
+                    padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 12.0), // Padding
+                    elevation: 5, // Shadow for a raised look
+                    minimumSize: Size(120, 50), // Smaller button size with same width
                   ),
+                  onPressed: isAnswerSelected
+                      ? null // Disable buttons after selection
+                      : () => _checkAnswer(option),
                   child: Text(
                     option,
-                    style: TextStyle(fontSize: width * 0.05), // 5% of screen width
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: 'Roboto', // A playful font
+                    ),
                   ),
                 ),
-              );
-            }).toList(),
-          ),
-        ],
+              )).toList(),
+            ),
+          ],
+        ),
       ),
     );
   }

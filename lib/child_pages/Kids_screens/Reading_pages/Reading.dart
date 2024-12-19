@@ -1,3 +1,5 @@
+import 'package:final_year_project/child_pages/Kids_screens/Reading_pages/story1.dart';
+import 'package:final_year_project/child_pages/Kids_screens/Reading_pages/story3.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 
@@ -29,9 +31,9 @@ class ReadingPage extends StatelessWidget {
                 shrinkWrap: true, // Allow GridView inside SingleChildScrollView
                 physics: const NeverScrollableScrollPhysics(), // Disable internal scrolling
                 children: [
-                  _buildContainer(context, 'Story 1', const Color(0xFFa3b68a), const StoryPage1()),
+                  _buildContainer(context, 'Story 1', const Color(0xFFa3b68a),  Story1Page()),
                   _buildContainer(context, 'Story 2', const Color(0xFFa3b68a), const StoryPage2()),
-                  _buildContainer(context, 'Story 3', const Color(0xFFa3b68a), const StoryPage3()),
+                  _buildContainer(context, 'Story 3', const Color(0xFFa3b68a),  Story3Page()),
                   _buildContainer(context, 'Story 4', const Color(0xFFa3b68a), const StoryPage4()),
                 ],
               ),
@@ -105,23 +107,6 @@ class ReadingPage extends StatelessWidget {
             ),
           ),
         ),
-      ),
-    );
-  }
-}
-
-class StoryPage1 extends StatelessWidget {
-  const StoryPage1({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Story 1'),
-        backgroundColor: const Color(0xFFa3b68a),
-      ),
-      body: SfPdfViewer.asset(
-        'assets/books/legs_count_book.pdf',
       ),
     );
   }
@@ -206,24 +191,6 @@ class _StoryPage2State extends State<StoryPage2> {
             ),
           ),
         ],
-      ),
-    );
-  }
-}
-
-
-class StoryPage3 extends StatelessWidget {
-  const StoryPage3({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Story 3'),
-        backgroundColor: const Color(0xFFa3b68a),
-      ),
-      body: const Center(
-        child: Text('Content for Story 3'),
       ),
     );
   }

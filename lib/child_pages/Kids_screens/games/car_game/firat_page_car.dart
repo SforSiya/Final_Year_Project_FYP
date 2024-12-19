@@ -1,12 +1,12 @@
-import 'package:final_year_project/child_pages/Kids_screens/games/shape_game/screens_ShapeGame/shape_screen.dart';
 import 'package:flutter/material.dart';
+import 'car_game.dart'; // Import the shape guessing screen
 
-class ShapeSplashScreen extends StatefulWidget {
+class carSplashScreen extends StatefulWidget {
   @override
-  _ShapeSplashScreenState createState() => _ShapeSplashScreenState();
+  _carSplashScreenState createState() => _carSplashScreenState();
 }
 
-class _ShapeSplashScreenState extends State<ShapeSplashScreen> {
+class _carSplashScreenState extends State<carSplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -15,7 +15,7 @@ class _ShapeSplashScreenState extends State<ShapeSplashScreen> {
           // Background GIF
           Positioned.fill(
             child: Image.asset(
-              'assets/kids/games/shapes_background.gif',
+              'assets/car_splash.gif',
               fit: BoxFit.cover,
             ),
           ),
@@ -50,9 +50,9 @@ class _ShapeSplashScreenState extends State<ShapeSplashScreen> {
                   ),
                   SizedBox(height: 10),
                   Text(
-                    'Test your shape recognition skills! '
-                        'You will be shown different shapes, and you must correctly identify them. '
-                        'Challenge yourself and see how many shapes you can guess correctly!',
+                    'CAR CONTROL  '
+                        'Move your car left or right to catch falling objects and score points. '
+                        'The game ends when the timer runs out, and your final score is displayed.',
                     textAlign: TextAlign.center,
                     style: TextStyle(fontSize: 16, color: Colors.black),
                   ),
@@ -61,7 +61,7 @@ class _ShapeSplashScreenState extends State<ShapeSplashScreen> {
                     onPressed: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => ShapeScreen()),
+                        MaterialPageRoute(builder: (context) => CarGameScreen()),
                       );
                     },
                     style: ElevatedButton.styleFrom(

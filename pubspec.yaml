@@ -79,29 +79,25 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/
+    - assets/shapes/
+    - assets/images/
+    - assets/story_1/
+    - assets/tables/
     - assets/images/First_page.gif
     - assets/kids/auto_profile.png
-    - assets/images/Alena_Sofina_happy.gif
-    - assets/images/Alena_Sofina_sad.gif
     - assets/kids/avatars/
-    - assets/splash_screen.gif
+    - assets/shapes/shapes_all/
+    - assets/car_splash.gif
+    - assets/splash_gif.gif
     - assets/age_set.gif
+    - assets/kids/kids_home.png
     - assets/kids/games/shapes_background.gif
-    - assets/kids/raccoon.png
     - assets/kids/games_icon.png
     - assets/kids/reading_icon.png
     - assets/kids/Progress_icon.png
-    - assets/kids/shapes_icon.png
-    - assets/images/level_3_background.gif
-    - assets/images/level_2_background.gif
+    - assets/images/shapes.png
     - assets/books/legs_count_book.pdf
-    - assets/images/rb_ball.png
-    - assets/images/flower_rb.png
-    - assets/images/elephant_rb.png
-    - assets/images/cat_rb.png
-    - assets/images/rb_star.png
-    - assets/games/shapes_background.gif
-    - assets/games/butterfly.gif
+    - assets/games/car_play.png
     - assets/games/grow_icon_1.png
     - assets/games/grow_icon_2.png
     - assets/games/grow_icon_3.png
@@ -118,6 +114,7 @@ flutter:
     - assets/Story2/image8.png
     - assets/Story2/image9.png
     - assets/Story2/image10.png
+    - assets/images/learning.png
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

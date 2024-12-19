@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'Authentication/Login_Screen.dart';
+import 'Authentication/splash_screen.dart';
 import 'firebase_options.dart';
 
 
@@ -19,7 +20,7 @@ class MyApp extends StatelessWidget {
 
       //darkTheme: darkMode,
       debugShowCheckedModeBanner: false, // Disable the debug banner
-      home: LoginPage(),
+      home: SplashScreen(),
     );
   }
 }

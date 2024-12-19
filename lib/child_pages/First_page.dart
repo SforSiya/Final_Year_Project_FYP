@@ -90,14 +90,14 @@ class _ChildHomePageState extends State<ChildHomePage> {
                     color: Colors.black,
                   ),
                 ),
-                Text(
+                /*Text(
                   widget.userName,
                   style: const TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.w500,
                     color: Colors.black,
                   ),
-                ),
+                ),*/
               ],
             ),
           ),

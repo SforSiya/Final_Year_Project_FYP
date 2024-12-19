@@ -139,12 +139,6 @@ class _LoginPageState extends State<LoginPage> {
     final screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       backgroundColor: Color(0xFFFDFAF7),
-      appBar: AppBar(
-        backgroundColor: Color(0xFF5c724a),
-        elevation: 0,
-        title: Text('Login', style: TextStyle(color: Color(0xFFfaf0e6))),
-        centerTitle: true,
-      ),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0),
@@ -157,7 +151,7 @@ class _LoginPageState extends State<LoginPage> {
                 style: TextStyle(
                   fontSize: 28,
                   fontWeight: FontWeight.bold,
-                  color: Color(0xFF5c724a),
+                  color: Color(0xFFffde59),
                 ),
               ),
               SizedBox(height: 8),
@@ -224,7 +218,7 @@ class _LoginPageState extends State<LoginPage> {
                       controller: _emailController,
                       decoration: InputDecoration(
                         labelText: 'Email',
-                        prefixIcon: Icon(Icons.email, color: Color(0xFF5c724a)),
+                        prefixIcon: Icon(Icons.email, color: Color(0xFFffde59)),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12.0),
                           borderSide: BorderSide.none,
@@ -239,11 +233,11 @@ class _LoginPageState extends State<LoginPage> {
                       obscureText: _obscurePassword,
                       decoration: InputDecoration(
                         labelText: 'Password',
-                        prefixIcon: Icon(Icons.lock, color: Color(0xFF5c724a)),
+                        prefixIcon: Icon(Icons.lock, color: Color(0xFFffde59)),
                         suffixIcon: IconButton(
                           icon: Icon(
                             _obscurePassword ? Icons.visibility_off : Icons.visibility,
-                            color:Color(0xFF5c724a),
+                            color:Color(0xFF000000),
                           ),
                           onPressed: () {
                             setState(() {
@@ -274,7 +268,7 @@ class _LoginPageState extends State<LoginPage> {
                   },
                   child: Text(
                     "Forget Password",
-                    style: TextStyle(color: Color(0xFF5c724a), fontSize: 16),
+                    style: TextStyle(color: Color(0xFF000000), fontSize: 16),
                   ),
                 ),
               ),
@@ -285,7 +279,7 @@ class _LoginPageState extends State<LoginPage> {
                 onPressed: _login,
                 style: ElevatedButton.styleFrom(
                   minimumSize: Size(screenWidth * 0.8, 50),
-                  backgroundColor: Color(0xFF5c724a),
+                  backgroundColor: Color(0xFFffde59),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12.0),
                   ),
@@ -313,7 +307,7 @@ class _LoginPageState extends State<LoginPage> {
                 },
                 child: Text(
                   "Don't have an account? Sign up",
-                  style: TextStyle(color: Color(0xFF5c724a), fontSize: 16),
+                  style: TextStyle(color: Color(0xFF000000), fontSize: 16),
                 ),
               ),
             ],
