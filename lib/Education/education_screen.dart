@@ -25,43 +25,41 @@ class EducationScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Education Resources', style: TextStyle(color: Colors.white)),
-        backgroundColor: Colors.black, // Set the AppBar to black
-        flexibleSpace: Container(
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              colors: [Color(0xFFFFDE59), Color(0xFFF7B4C6)],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-            ),
-          ),
+        title: const Text(
+          'Education Resources',
+          style: TextStyle(color: Colors.white),
+        ),
+        backgroundColor: const Color(0xFF373E37), // Dark shade for AppBar
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.white), // White back button
+          onPressed: () {
+            Navigator.pop(context);
+          },
         ),
       ),
-      backgroundColor: const Color(0xFFF7F7F7), // Set the background of the screen to off-white
+      backgroundColor: const Color(0xFFF7F7F7), // Off-white background
       body: ListView.builder(
         itemCount: educationItems.length,
         itemBuilder: (context, index) {
           final item = educationItems[index];
-          final colors = [
-            const Color(0xFFFFDE59),
-            const Color(0xFFF7B4C6),
-            const Color(0xFF373E37)
-          ];
-          final color = colors[index % colors.length];
           return Card(
             margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
             child: Container(
               decoration: BoxDecoration(
-                color: color,
+                color: const Color(0xFFFFDE59), // Yellow background
                 borderRadius: BorderRadius.circular(10),
               ),
               child: ListTile(
-                leading: Icon(Icons.link, color: Colors.white),
+                leading: const Icon(Icons.link, color: Color(0xFF373E37)), // Dark icon
                 title: Text(
                   item['title']!,
-                  style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
+                  style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xFF373E37), // Dark text
+                  ),
                 ),
-                trailing: const Icon(Icons.arrow_forward, color: Colors.white),
+                trailing: const Icon(Icons.arrow_forward, color: Color(0xFF373E37)), // Dark trailing icon
                 onTap: () {
                   _openUrl(item['url']!);
                 },

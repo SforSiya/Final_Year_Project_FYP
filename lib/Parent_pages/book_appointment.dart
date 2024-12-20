@@ -65,7 +65,7 @@ class _BookAppointmentState extends State<BookAppointment> {
                             horizontal: 16, vertical: 10),
                         decoration: BoxDecoration(
                           color: selectedDoctor == data['username']
-                              ? const Color(0xFFF7B4C6).withOpacity(0.9)
+                              ? const Color(0xFFFFDE59).withOpacity(0.9)
                               : Colors.transparent,
                           borderRadius: BorderRadius.circular(20),
                           border: Border.all(color: const Color(0xFF373E37)),
@@ -108,7 +108,7 @@ class _BookAppointmentState extends State<BookAppointment> {
                         horizontal: 16, vertical: 10),
                     decoration: BoxDecoration(
                       color: selectedDay == day
-                          ? const Color(0xFFF7B4C6).withOpacity(0.9)
+                          ? const Color(0xFFFFDE59).withOpacity(0.9)
                           : Colors.transparent,
                       borderRadius: BorderRadius.circular(20),
                       border: Border.all(color: const Color(0xFF373E37)),
@@ -150,7 +150,7 @@ class _BookAppointmentState extends State<BookAppointment> {
                           horizontal: 16, vertical: 10),
                       decoration: BoxDecoration(
                         color: selectedTime == time
-                            ? const Color(0xFFF7B4C6).withOpacity(0.9)
+                            ? const Color(0xFFFFDE59).withOpacity(0.9)
                             : Colors.transparent,
                         borderRadius: BorderRadius.circular(20),
                         border: Border.all(color: const Color(0xFF373E37)),

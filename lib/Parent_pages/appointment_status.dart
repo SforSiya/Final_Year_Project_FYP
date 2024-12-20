@@ -16,6 +16,9 @@ class AppointmentStatus extends StatelessWidget {
           style: TextStyle(color: Colors.white), // White text color for AppBar
         ),
         backgroundColor: Colors.black, // Full black AppBar
+        iconTheme: const IconThemeData(
+          color: Colors.white, // Set back icon color to white
+        ),
       ),
       body: StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance
@@ -61,15 +64,15 @@ class AppointmentStatus extends StatelessWidget {
 
               switch (status.toLowerCase()) {
                 case 'accepted':
-                  statusColor = Colors.yellow.shade800;
+                  statusColor = Colors.black;
                   containerColor = const Color(0xFFFFDE59);
                   break;
                 case 'pending':
-                  statusColor = Colors.pink.shade600;
-                  containerColor = const Color(0xFFF7B4C6);
+                  statusColor = Colors.black;
+                  containerColor = const Color(0xFFFFDE59);
                   break;
                 case 'rejected':
-                  statusColor = Colors.black;
+                  statusColor = Colors.white;
                   containerColor = const Color(0xFF373E37);
                   break;
                 default:

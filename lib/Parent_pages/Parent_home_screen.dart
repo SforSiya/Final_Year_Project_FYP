@@ -67,8 +67,8 @@ class _ParentHomeScreenState extends State<ParentHomeScreen> {
                   ParentHome(userName: widget.userName, parentEmail: widget.parentEmail),
                 ),
                 width: MediaQuery.of(context).size.width, // Full width
-                containerColor: const Color(0xFF373E37), // Black shade color
-                textColor: Colors.white,
+                containerColor: const Color(0xFFF7B4C6), // Black shade color
+                textColor: Colors.black,
                 isHome: true, // Flag to indicate if it's the home container
               ),
               const SizedBox(height: 8), // Reduced spacing between containers
@@ -83,8 +83,8 @@ class _ParentHomeScreenState extends State<ParentHomeScreen> {
                       BookAppointment(parentEmail: widget.parentEmail),
                     ),
                     width: MediaQuery.of(context).size.width * 0.45, // Half width
-                    containerColor: const Color(0xFFFFDE59), // Yellow
-                    textColor: Colors.black,
+                    containerColor: const Color(0xFF373E37), // Yellow
+                    textColor: Colors.white,
                   ),
                   _buildClickableContainer(
                     label: 'Status',
@@ -93,7 +93,7 @@ class _ParentHomeScreenState extends State<ParentHomeScreen> {
                       AppointmentStatus(parentEmail: widget.parentEmail),
                     ),
                     width: MediaQuery.of(context).size.width * 0.45, // Half width
-                    containerColor: const Color(0xFFF7B4C6), // Pink
+                    containerColor: const Color(0xFFFFDE59), // Pink
                     textColor: Colors.black,
                   ),
                 ],
@@ -108,7 +108,7 @@ class _ParentHomeScreenState extends State<ParentHomeScreen> {
                     imagePath: 'assets/education.png',
                     onTap: () => _navigateToScreen(EducationScreen()),
                     width: MediaQuery.of(context).size.width * 0.45, // Half width
-                    containerColor: const Color(0xFFF7B4C6), // Pink
+                    containerColor: const Color(0xFFFFDE59), // Pink
                     textColor: Colors.black,
                   ),
                   _buildClickableContainer(
